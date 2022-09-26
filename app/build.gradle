@@ -81,4 +81,7 @@ dependencies {
     //logging
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.9"
 
+    //fragment
+    implementation("androidx.fragment:fragment-ktx:1.5.3")
+
 }

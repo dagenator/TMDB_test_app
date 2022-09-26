@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import com.example.tmdb_test_app.core.app.App
 import com.example.tmdb_test_app.core.factory.ViewModelFactory
@@ -40,6 +42,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         (applicationContext as App).appComponent.inject(this)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                add<MovieFragment>(R.id.fragment_container_view)
+            }
+        }
 
         viewModel.getMovieById(115).observe(this, observeGetMovie)
     }
