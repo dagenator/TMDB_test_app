@@ -1,47 +1,40 @@
 package com.example.tmdb_test_app
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.tmdb_test_app.core.app.App
+import com.example.tmdb_test_app.core.di.FragmentComponent
 import com.example.tmdb_test_app.core.factory.ViewModelFactory
-import com.example.tmdb_test_app.data.models.Movie
-import com.example.tmdb_test_app.data.utils.Resource
-import com.example.tmdb_test_app.data.utils.Status
 import com.example.tmdb_test_app.presenter.MainViewModel
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
 
-    private val viewModel: MainViewModel by viewModels<MainViewModel> { viewModelFactory }
+    // Reference to the Login graph
+    lateinit var fragmentComponent: FragmentComponent
 
-    val observeGetMovie = Observer<Resource<Movie>>{
-        it?.let {
-            when(it.status){
-                Status.LOADING->{
-                    Log.i("mAct", "loading ")
-                }
-                Status.ERROR->{
-                    Log.i("mAct", "error ${it.message}")
-                }
-                Status.SUCCESS->{
-                    Log.i("mAct", "${it.data}")
-                }
-            }
-        }
-    }
+    // Fields that need to be injected by the login graph
+    @Inject lateinit var viewModel: MainViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        (applicationContext as App).appComponent.inject(this)
+
+        // Creation of the login graph using the application graph
+        fragmentComponent = (applicationContext as App)
+            .appComponent.fragmentComponent().create()
+
+        // Make Dagger instantiate @Inject fields in LoginActivity
+        fragmentComponent.inject(this)
+
+        // Now loginViewModel is available
+
 
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
@@ -50,6 +43,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.getMovieById(115).observe(this, observeGetMovie)
+
     }
 }

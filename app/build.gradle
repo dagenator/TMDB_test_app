@@ -46,6 +46,8 @@ dependencies {
     //dagger2
     implementation 'com.google.dagger:dagger:2.38.1'
     kapt 'com.google.dagger:dagger-compiler:2.38.1'
+    kapt 'com.google.dagger:dagger-android-processor:2.35.1'
+    implementation 'com.google.dagger:dagger-android-support:2.35.1'
 
 
 //Retrofit
@@ -84,4 +86,6 @@ dependencies {
     //fragment
     implementation("androidx.fragment:fragment-ktx:1.5.3")
 
+    //pictures
+    implementation ("com.nostra13.universalimageloader:universal-image-loader:1.9.5")
 }

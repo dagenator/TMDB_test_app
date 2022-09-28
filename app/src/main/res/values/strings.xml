@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TMDB_test_app</string>
+    <string name="actors_list_title">Actors:</string>
 </resources>

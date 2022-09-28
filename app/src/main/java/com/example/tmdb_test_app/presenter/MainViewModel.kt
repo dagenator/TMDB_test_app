@@ -1,23 +1,52 @@
 package com.example.tmdb_test_app.presenter
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import com.example.tmdb_test_app.data.models.Movie
+import androidx.lifecycle.viewModelScope
+import com.example.tmdb_test_app.core.di.ActivityScope
+import com.example.tmdb_test_app.data.models.MovieAndCast
 import com.example.tmdb_test_app.data.utils.Resource
-import com.example.tmdb_test_app.domain.interfaces.GetMovieByIdUseCase
+import com.example.tmdb_test_app.domain.interfaces.GetMovieAndCastByIdUseCase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
+import java.io.InputStream
+import java.net.URL
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(val getMovieByIdUseCase: GetMovieByIdUseCase) : ViewModel() {
+@ActivityScope
+class MainViewModel @Inject constructor(val getMovieAndCastByIdUseCase: GetMovieAndCastByIdUseCase) :
+    ViewModel() {
 
-    fun getMovieById(id: Int) = liveData<Resource<Movie>> {
-        withContext(Dispatchers.IO) {
-            getMovieByIdUseCase(id).collect {
-                emit(it)
-                Log.i("tag", "getMovieById: $it")
-            }
+    val movie = MutableLiveData<Resource<MovieAndCast>>()
+
+    fun getMovieAndCastById(id: Int) {
+        viewModelScope.launch {
+            getMovieAndCastByIdUseCase(id)
+                .collect {
+                    movie.value = it
+                    Log.i("tag", "getMovieById: $it")
+                }
+
         }
+    }
+
+    fun getPosterBitmapByURL(url: String): Bitmap? {
+        CoroutineScope(Dispatchers.IO).launch {
+
+        }
+        var picture: Bitmap? = null
+        try {
+            Log.i("URLPoster", "getPosterBitmapByURL: ${URL(url)}")
+            val inputStream: InputStream = URL(url).openStream()
+            picture = BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            Log.e("Error", e.message!!)
+            e.printStackTrace()
+        }
+        return picture
     }
 }
