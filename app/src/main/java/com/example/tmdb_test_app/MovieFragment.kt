@@ -20,6 +20,7 @@ import com.example.tmdb_test_app.data.utils.Resource
 import com.example.tmdb_test_app.data.utils.Status
 import com.example.tmdb_test_app.presenter.ActorsListAdapter
 import com.example.tmdb_test_app.presenter.MainViewModel
+import com.example.tmdb_test_app.presenter.utils.ImageUtils
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
@@ -30,6 +31,7 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
     // Fields that need to be injected by the login graph
     @Inject lateinit var viewModel: MainViewModel
     @Inject lateinit var config: Config
+    @Inject lateinit var imageUtils: ImageUtils
 
     val observeGetMovie = Observer<Resource<MovieAndCast>> {
         it?.let {
@@ -58,8 +60,6 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
 
         (activity as MainActivity).fragmentComponent.inject(this)
 
-        // Now you can access loginViewModel here and onCreateView too
-        // (shared instance with the Activity and the other Fragment)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,14 +83,7 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
             recycler.layoutManager = LinearLayoutManager(context)
             recycler.adapter = adapter
 
-            val imageLoader = ImageLoader.getInstance()
-            imageLoader.init(ImageLoaderConfiguration.createDefault(context))
-            val displayOptions = DisplayImageOptions.Builder()
-                .showImageOnFail(R.drawable.no_image)
-                .showImageForEmptyUri(R.drawable.no_image)
-                .cacheInMemory(true).build()
-            val url =config.imageUrl + movie.movie.posterPath
-            imageLoader.displayImage(url, image, displayOptions, null)
+            imageUtils.loadImage(image, movie.movie.posterPath, context, movie.movie)
         }
     }
 

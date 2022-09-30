@@ -2,6 +2,7 @@ package com.example.tmdb_test_app.core.retrofit
 
 import com.example.tmdb_test_app.data.models.CastAndCrew
 import com.example.tmdb_test_app.data.models.Movie
+import com.example.tmdb_test_app.data.models.PopularMovies
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -18,5 +19,17 @@ interface TMDBApiService {
         @Path("movie_id") id: Int,
         @Query("api_key") key: String
     ): CastAndCrew
+
+//    @GET("/3/movie/{movie_id}/credits")
+//    suspend fun getMovieByIdAndGenre(
+//        @Path("movie_id") id: Int,
+//        @Query("api_key") key: String
+//    ): CastAndCrew
+
+    @GET("/3/movie/popular")
+    suspend fun getPopularMovies(
+        @Query("api_key") key: String,
+        @Query("page") page: Int
+    ): PopularMovies
 
 }

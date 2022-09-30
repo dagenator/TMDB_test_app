@@ -26,14 +26,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Creation of the login graph using the application graph
         fragmentComponent = (applicationContext as App)
             .appComponent.fragmentComponent().create()
 
-        // Make Dagger instantiate @Inject fields in LoginActivity
         fragmentComponent.inject(this)
-
-        // Now loginViewModel is available
 
 
         if (savedInstanceState == null) {
@@ -42,7 +38,6 @@ class MainActivity : AppCompatActivity() {
                 add<MovieFragment>(R.id.fragment_container_view)
             }
         }
-
 
     }
 }

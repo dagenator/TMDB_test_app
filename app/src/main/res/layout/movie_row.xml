@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <ImageView
+        android:id="@+id/movie_row_poster"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/movie_row_name"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        app:layout_constraintStart_toEndOf="@id/movie_row_poster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="12dp"
+        tools:text = "Name of film"
+        android:gravity="center"
+        android:textSize="22dp"
+        />
+    <TextView
+        android:id="@+id/movie_row_score"
+        app:layout_constraintStart_toEndOf="@id/movie_row_poster"
+        app:layout_constraintTop_toBottomOf="@id/movie_row_name"
+        app:layout_constraintEnd_toStartOf="movie_row_data"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:padding="12dp"
+        android:gravity="center"
+        tools:text ="7.667"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:id="@+id/movie_row_data"
+        app:layout_constraintStart_toEndOf="@id/movie_row_score"
+        app:layout_constraintTop_toBottomOf="@id/movie_row_name"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:padding="12sp"
+        tools:text="06.10.3345"
+        android:gravity="center"
+        android:textSize="20sp"
+
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,19 +34,4 @@ class MainViewModel @Inject constructor(val getMovieAndCastByIdUseCase: GetMovie
         }
     }
 
-    fun getPosterBitmapByURL(url: String): Bitmap? {
-        CoroutineScope(Dispatchers.IO).launch {
-
-        }
-        var picture: Bitmap? = null
-        try {
-            Log.i("URLPoster", "getPosterBitmapByURL: ${URL(url)}")
-            val inputStream: InputStream = URL(url).openStream()
-            picture = BitmapFactory.decodeStream(inputStream)
-        } catch (e: Exception) {
-            Log.e("Error", e.message!!)
-            e.printStackTrace()
-        }
-        return picture
-    }
 }
