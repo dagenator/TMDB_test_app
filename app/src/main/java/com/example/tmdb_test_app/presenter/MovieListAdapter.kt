@@ -7,20 +7,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.tmdb_test_app.R
-import com.example.tmdb_test_app.data.models.Cast
+import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.Movie
-import com.example.tmdb_test_app.presenter.utils.ImageUtils
-import javax.inject.Inject
 
-class MovieListAdapter @Inject constructor(val imageUtils: ImageUtils, val context: Context) :
+
+class MovieListAdapter(
+    private val dataSet: Array<Movie>,
+    private val config: Config
+) :
     RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
-
-    private var dataSet: Array<Movie>? = null
-
-    fun setData(data: Array<Movie>){
-        dataSet = data
-    }
 
     class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val movieRowPoster: ImageView
@@ -44,12 +41,19 @@ class MovieListAdapter @Inject constructor(val imageUtils: ImageUtils, val conte
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        dataSet?.let {
-            imageUtils.loadImage(holder.movieRowPoster, it[position].posterPath, context)
-            holder.movieRowData.text =  it[position].releaseDate
-            holder.movieRowName.text = it[position].title
-            holder.movieRowScore.text = it[position].voteAverage.toString()
-        }
+        val imageView: ImageView = holder.movieRowPoster
+        val currentUrl: String = config.imageUrl + dataSet[position].posterPath
+
+        Glide.with(holder.itemView.context)
+            .load(currentUrl)
+            .error(R.drawable.no_image)
+            .into(imageView)
+
+        holder.movieRowData.text = dataSet[position].releaseDate
+        holder.movieRowName.text = dataSet[position].title
+        holder.movieRowScore.text = dataSet[position].voteAverage.toString()
+
     }
-    override fun getItemCount() = dataSet?.size ?: 0
+
+    override fun getItemCount() = dataSet.size ?: 0
 }

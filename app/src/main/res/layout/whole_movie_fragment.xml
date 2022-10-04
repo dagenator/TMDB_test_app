@@ -1,120 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-    <TextView
-        android:id="@+id/movie_error"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:gravity="center"
-        android:textSize="20sp"/>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swiperefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/movie_info_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="59dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/movie_info_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="59dp">
 
-        <ImageView
-            android:id="@+id/picture"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:minHeight="100dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_height="300dp"/>
+            <ImageView
+                android:id="@+id/picture"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:minHeight="100dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_height="300dp" />
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:gravity="center"
-            android:minWidth="200dp"
-            android:minHeight="60dp"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/picture"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:gravity="center"
+                android:minWidth="200dp"
+                android:minHeight="60dp"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/picture"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/score"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/picture"
-            app:layout_constraintStart_toStartOf="@id/picture"
-            app:layout_constraintEnd_toEndOf="@id/picture"
-            app:layout_constraintBottom_toBottomOf="@id/actors"/>
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/actors"
+                app:layout_constraintEnd_toEndOf="@id/picture"
+                app:layout_constraintStart_toStartOf="@id/picture"
+                app:layout_constraintTop_toBottomOf="@id/picture" />
 
-        <TextView
-            android:id="@+id/genre"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/picture"
-            app:layout_constraintTop_toBottomOf="@id/name" />
+            <TextView
+                android:id="@+id/genre"
+                android:layout_width="180dp"
+                android:layout_height="50dp"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/picture"
+                app:layout_constraintTop_toBottomOf="@id/name" />
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="180dp"
-            android:layout_height="20dp"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/picture"
-            app:layout_constraintTop_toBottomOf="@id/genre" />
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="180dp"
+                android:layout_height="20dp"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/picture"
+                app:layout_constraintTop_toBottomOf="@id/genre" />
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/actors" />
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/actors" />
 
-        <TextView
-            android:id="@+id/actorsListTitle"
-            android:layout_width="160dp"
-            android:layout_height="20dp"
-            android:layout_margin="8dp"
-            android:gravity="center"
-            android:text="@string/actors_list_title"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/picture"
-            app:layout_constraintTop_toBottomOf="@id/date" />
+            <TextView
+                android:id="@+id/actorsListTitle"
+                android:layout_width="160dp"
+                android:layout_height="20dp"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:text="@string/actors_list_title"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/picture"
+                app:layout_constraintTop_toBottomOf="@id/date" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/actors"
-            android:layout_width="180dp"
-            android:layout_height="190dp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/actors"
+                android:layout_width="180dp"
+                android:layout_height="190dp"
 
-            android:layout_margin="8dp"
-            android:maxHeight="200dp"
-            app:layout_constraintStart_toEndOf="@id/picture"
-            app:layout_constraintTop_toBottomOf="@id/actorsListTitle"
-            tools:layout_height="200dp"
+                android:layout_margin="8dp"
+                android:maxHeight="200dp"
+                app:layout_constraintStart_toEndOf="@id/picture"
+                app:layout_constraintTop_toBottomOf="@id/actorsListTitle"
+                tools:layout_height="200dp"
 
-            />
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/movie_progress_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

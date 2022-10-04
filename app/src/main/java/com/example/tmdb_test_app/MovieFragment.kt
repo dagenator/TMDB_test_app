@@ -7,33 +7,29 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tmdb_test_app.core.factory.ViewModelFactory
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.MovieAndCast
 import com.example.tmdb_test_app.data.utils.Resource
 import com.example.tmdb_test_app.data.utils.Status
 import com.example.tmdb_test_app.presenter.ActorsListAdapter
 import com.example.tmdb_test_app.presenter.MainViewModel
-import com.example.tmdb_test_app.presenter.utils.ImageUtils
-import com.nostra13.universalimageloader.core.DisplayImageOptions
-import com.nostra13.universalimageloader.core.ImageLoader
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import javax.inject.Inject
 
 class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragment) {
 
-    // Fields that need to be injected by the login graph
     @Inject lateinit var viewModel: MainViewModel
     @Inject lateinit var config: Config
-    @Inject lateinit var imageUtils: ImageUtils
 
-    val observeGetMovie = Observer<Resource<MovieAndCast>> {
+    private val observeGetMovie = Observer<Resource<MovieAndCast>> {
         it?.let {
             when (it.status) {
                 Status.LOADING -> {
@@ -42,7 +38,8 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
                 }
                 Status.ERROR -> {
                     Log.i("mAct", "error ${it.message}")
-                    setError(it.message.toString())
+                    showError(it.message.toString())
+                    setLoader(false)
                 }
                 Status.SUCCESS -> {
                     setLoader(false)
@@ -55,11 +52,8 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
     }
 
     override fun onAttach(context: Context) {
-
         super.onAttach(context)
-
         (activity as MainActivity).fragmentComponent.inject(this)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,7 +63,7 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
         viewModel.getMovieAndCastById(345)
     }
 
-    fun setMovieUi(movie: MovieAndCast) {
+    private fun setMovieUi(movie: MovieAndCast) {
         view?.let {
             val image = it.findViewById<ImageView>(R.id.picture)
 
@@ -83,11 +77,24 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
             recycler.layoutManager = LinearLayoutManager(context)
             recycler.adapter = adapter
 
-            imageUtils.loadImage(image, movie.movie.posterPath, context, movie.movie)
+            val url = config.imageUrl+movie.movie.posterPath
+            Glide
+                .with(this)
+                .load(url)
+                .error(R.drawable.no_image)
+                .apply( RequestOptions().override(700, 900))
+                .into(image)
+
+            val swipeLayout = it.findViewById<SwipeRefreshLayout>(R.id.swiperefresh)
+            swipeLayout.setOnRefreshListener {
+                Log.i("refresh", "onRefresh called from SwipeRefreshLayout")
+                viewModel.getMovieAndCastById(346)
+                swipeLayout.isRefreshing = false
+            }
         }
     }
 
-    fun setLoader(isLoading: Boolean) {
+    private fun setLoader(isLoading: Boolean) {
         view?.let {
             val progressBar = it.findViewById<ProgressBar>(R.id.movie_progress_bar)
             val container = it.findViewById<ConstraintLayout>(R.id.movie_info_container)
@@ -96,11 +103,7 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
         }
     }
 
-    fun setError(text: String) {
-        view?.let {
-            val error = it.findViewById<TextView>(R.id.movie_error)
-            error.text = text
-            error.visibility = View.VISIBLE
-        }
+    private fun showError(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
 }
