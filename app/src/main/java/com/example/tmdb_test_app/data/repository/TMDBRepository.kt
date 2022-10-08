@@ -1,8 +1,11 @@
 package com.example.tmdb_test_app.data.repository
 
+import android.graphics.pdf.PdfDocument
 import com.example.tmdb_test_app.core.retrofit.TMDBApiService
 import com.example.tmdb_test_app.data.models.Config
+import com.example.tmdb_test_app.data.models.Movie
 import com.example.tmdb_test_app.data.models.MovieAndCast
+import com.example.tmdb_test_app.data.models.PopularMovies
 import com.example.tmdb_test_app.data.utils.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +27,19 @@ class TMDBRepository @Inject constructor(val tmdbApiService: TMDBApiService, val
             }.await()
             emit(Resource.success(result))
 
+        }.catch { e ->
+            emit(Resource.error(message = e.message ?: "Error Occurred!"))
+        }
+
+    suspend fun getPopularMovies(page: Int) =
+        flow<Resource<PopularMovies>> {
+            emit(Resource.loading(data = null))
+
+            val movies =  CoroutineScope(Dispatchers.IO).async {
+                return@async tmdbApiService.getPopularMovies(config.apiKey, page)
+            }.await()
+
+            emit(Resource.success(movies))
         }.catch { e ->
             emit(Resource.error(message = e.message ?: "Error Occurred!"))
         }

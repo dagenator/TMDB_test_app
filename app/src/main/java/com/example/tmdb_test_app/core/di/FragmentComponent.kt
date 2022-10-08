@@ -2,6 +2,8 @@ package com.example.tmdb_test_app.core.di
 
 import com.example.tmdb_test_app.MainActivity
 import com.example.tmdb_test_app.MovieFragment
+import com.example.tmdb_test_app.PopularFragment
+import com.example.tmdb_test_app.data.models.PopularMovies
 import dagger.Subcomponent
 
 @ActivityScope
@@ -23,7 +25,8 @@ interface FragmentComponent {
     // request injection from LoginComponent. The graph needs to satisfy
     // all the dependencies of the fields those classes are injecting
     fun inject(mainActivity: MainActivity)
-    fun inject(MovieFragment: MovieFragment)
+    fun inject(movieFragment: MovieFragment)
+    fun inject(popularFragment: PopularFragment)
 
 
 }

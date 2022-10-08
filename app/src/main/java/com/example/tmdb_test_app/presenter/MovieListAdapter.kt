@@ -1,25 +1,28 @@
 package com.example.tmdb_test_app.presenter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.tmdb_test_app.R
 import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.Movie
 
-
 class MovieListAdapter(
-    private val dataSet: Array<Movie>,
-    private val config: Config
+    private val config: Config,
+    private val context: Fragment
 ) :
-    RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
+    PagingDataAdapter<Movie, MovieListAdapter.MovieViewHolder>(MovieDiffItemCallback) {
 
-    class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class MovieViewHolder(val view: View) :
+        RecyclerView.ViewHolder(view) {
         val movieRowPoster: ImageView
         val movieRowName: TextView
         val movieRowScore: TextView
@@ -31,6 +34,31 @@ class MovieListAdapter(
             movieRowScore = view.findViewById(R.id.movie_row_score)
             movieRowData = view.findViewById(R.id.movie_row_data)
         }
+
+
+        fun bind(movie: Movie?, context: Fragment, config: Config) {
+
+            movie?.let {
+                val url = config.imageUrl + movie.posterPath
+                Glide
+                    .with(context)
+                    .load(url)
+                    .error(R.drawable.no_image)
+                    .apply(RequestOptions().override(100, 200))
+                    .into(movieRowPoster)
+            }
+
+            if (movie == null) {
+                Glide
+                    .with(context)
+                    .load(R.drawable.no_image)
+                    .apply(RequestOptions().override(100, 200))
+                    .into(movieRowPoster)
+            }
+            movieRowName.text = movie?.title
+            movieRowData.text = movie?.releaseDate
+            movieRowScore.text = movie?.voteAverage.toString()
+        }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): MovieViewHolder {
@@ -41,19 +69,19 @@ class MovieListAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val imageView: ImageView = holder.movieRowPoster
-        val currentUrl: String = config.imageUrl + dataSet[position].posterPath
-
-        Glide.with(holder.itemView.context)
-            .load(currentUrl)
-            .error(R.drawable.no_image)
-            .into(imageView)
-
-        holder.movieRowData.text = dataSet[position].releaseDate
-        holder.movieRowName.text = dataSet[position].title
-        holder.movieRowScore.text = dataSet[position].voteAverage.toString()
-
+        holder.bind(getItem(position), context, config)
     }
 
-    override fun getItemCount() = dataSet.size ?: 0
 }
+
+object MovieDiffItemCallback : DiffUtil.ItemCallback<Movie>() {
+    override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        // Id is unique.
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        return oldItem == newItem
+    }
+}
+

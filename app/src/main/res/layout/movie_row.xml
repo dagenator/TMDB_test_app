@@ -4,6 +4,8 @@
     android:layout_height="120dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+
     <ImageView
         android:id="@+id/movie_row_poster"
         app:layout_constraintStart_toStartOf="parent"
@@ -14,7 +16,7 @@
     <TextView
         android:id="@+id/movie_row_name"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="52dp"
         app:layout_constraintStart_toEndOf="@id/movie_row_poster"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,6 +24,7 @@
         tools:text = "Name of film"
         android:gravity="center"
         android:textSize="22dp"
+        android:layout_marginTop="8dp"
         />
 
     <TextView
@@ -29,11 +32,12 @@
         app:layout_constraintStart_toEndOf="@id/movie_row_poster"
         app:layout_constraintTop_toBottomOf="@id/movie_row_name"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="52dp"
         android:padding="12dp"
         android:gravity="center"
-        tools:text ="7.667"
+        tools:text= "7.667"
         android:textSize="20sp"
+        android:layout_marginBottom="8dp"
         />
 
     <TextView
@@ -41,7 +45,7 @@
         app:layout_constraintStart_toEndOf="@id/movie_row_score"
         app:layout_constraintTop_toBottomOf="@id/movie_row_name"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="52dp"
         android:padding="12sp"
         tools:text="06.10.3345"
         android:gravity="center"
