@@ -59,8 +59,11 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        val movieId = arguments?.getLong("movieId")?.toInt() ?: defaultMovieNumber
+
         viewModel.movie.observe(viewLifecycleOwner, observeGetMovie)
-        viewModel.getMovieAndCastById(345)
+        viewModel.getMovieAndCastById(movieId)
     }
 
     private fun setMovieUi(movie: MovieAndCast) {
@@ -105,5 +108,9 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
 
     private fun showError(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+    }
+
+    companion object{
+        const val defaultMovieNumber = 345
     }
 }

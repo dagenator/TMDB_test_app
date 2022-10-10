@@ -5,7 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -21,20 +25,22 @@ class MovieListAdapter(
 ) :
     PagingDataAdapter<Movie, MovieListAdapter.MovieViewHolder>(MovieDiffItemCallback) {
 
+
     class MovieViewHolder(val view: View) :
         RecyclerView.ViewHolder(view) {
         val movieRowPoster: ImageView
         val movieRowName: TextView
         val movieRowScore: TextView
         val movieRowData: TextView
+        val movieRow : ConstraintLayout
 
         init {
             movieRowPoster = view.findViewById(R.id.movie_row_poster)
             movieRowName = view.findViewById(R.id.movie_row_name)
             movieRowScore = view.findViewById(R.id.movie_row_score)
             movieRowData = view.findViewById(R.id.movie_row_data)
+            movieRow = view.findViewById(R.id.movie_row)
         }
-
 
         fun bind(movie: Movie?, context: Fragment, config: Config) {
 
@@ -58,6 +64,11 @@ class MovieListAdapter(
             movieRowName.text = movie?.title
             movieRowData.text = movie?.releaseDate
             movieRowScore.text = movie?.voteAverage.toString()
+            movieRow.setOnClickListener {
+                val navController = view.findNavController()
+                val bundle = bundleOf("movieId" to movie?.id)
+                navController.navigate(R.id.movieFragment, bundle)
+            }
         }
     }
 

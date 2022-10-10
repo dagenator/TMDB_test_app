@@ -11,13 +11,10 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    // Reference to the Login graph
     lateinit var fragmentComponent: FragmentComponent
 
-    // Fields that need to be injected by the login graph
     @Inject
     lateinit var viewModel: MainViewModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,13 +25,11 @@ class MainActivity : AppCompatActivity() {
 
         fragmentComponent.inject(this)
 
-
         if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                setReorderingAllowed(true)
-                add<PopularFragment>(R.id.fragment_container_view)
-            }
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container_view, PopularFragment())
+                .commit()
         }
-
     }
+
 }
