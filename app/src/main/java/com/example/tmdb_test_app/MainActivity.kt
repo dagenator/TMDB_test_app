@@ -2,8 +2,6 @@ package com.example.tmdb_test_app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
 import com.example.tmdb_test_app.core.app.App
 import com.example.tmdb_test_app.core.di.FragmentComponent
 import com.example.tmdb_test_app.presenter.MainViewModel
@@ -18,18 +16,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         fragmentComponent = (applicationContext as App)
             .appComponent.fragmentComponent().create()
 
         fragmentComponent.inject(this)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container_view, PopularFragment())
-                .commit()
-        }
+        setContentView(R.layout.activity_main)
+
     }
 
 }

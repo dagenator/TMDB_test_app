@@ -8,8 +8,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +31,7 @@ class MovieListAdapter(
         val movieRowName: TextView
         val movieRowScore: TextView
         val movieRowData: TextView
-        val movieRow : ConstraintLayout
+        val movieRow: ConstraintLayout
 
         init {
             movieRowPoster = view.findViewById(R.id.movie_row_poster)
@@ -64,8 +63,9 @@ class MovieListAdapter(
             movieRowName.text = movie?.title
             movieRowData.text = movie?.releaseDate
             movieRowScore.text = movie?.voteAverage.toString()
+
             movieRow.setOnClickListener {
-                val navController = view.findNavController()
+                val navController = context.findNavController()
                 val bundle = bundleOf("movieId" to movie?.id)
                 navController.navigate(R.id.movieFragment, bundle)
             }

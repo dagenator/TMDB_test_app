@@ -72,7 +72,6 @@ class PopularFragment @Inject constructor() : Fragment(R.layout.movies_list_frag
         }
     }
 
-
     private fun setMovieUi(movie: PopularMovies) {
         view?.let {
 //            val swipeLayout = it.findViewById<SwipeRefreshLayout>(R.id.movie_list_refresh)

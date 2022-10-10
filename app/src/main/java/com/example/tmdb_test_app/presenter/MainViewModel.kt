@@ -35,6 +35,7 @@ class MainViewModel @Inject constructor(
         popularMoviesPageSource
     }.flow
         .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty() )
+        .cachedIn(viewModelScope)
 
 
     fun getMovieAndCastById(id: Int) {
