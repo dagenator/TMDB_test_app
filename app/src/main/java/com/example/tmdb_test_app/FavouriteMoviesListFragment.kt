@@ -49,7 +49,7 @@ class FavouriteMoviesListFragment @Inject constructor() : Fragment(R.layout.favo
             if (movies == null) {
                 val error = it.findViewById<TextView>(R.id.favourite_list_error)
                 error.visibility = View.VISIBLE
-                error.text = "Zero favourite movies("
+                error.text = getString(R.string.none_favourite)
             }
         }
     }
