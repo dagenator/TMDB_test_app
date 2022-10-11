@@ -7,10 +7,8 @@ import dagger.android.AndroidInjector
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [ SubcomponentsModule::class, AppModule::class,  NetworkModule::class, UseCaseBindModule::class])// DBModule::class])
+@Component(modules = [ SubcomponentsModule::class, AppModule::class,  NetworkModule::class, UseCaseBindModule::class, BDModule::class])
 interface AppComponent : AndroidInjector<App> {
-    //fun inject(mainActivity: MainActivity)
-
     fun fragmentComponent():FragmentComponent.Factory
 }
 

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">TMDB_test_app</string>
     <string name="actors_list_title">Actors:</string>
+    <string name="white_heart">🤍</string>
+    <string name="blue_heart">💙</string>
+    <string name="red_heart">❤</string>
+    <string name="none_favourite">Zero favourite movies(</string>
 </resources>

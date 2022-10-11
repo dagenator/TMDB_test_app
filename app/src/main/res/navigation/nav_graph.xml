@@ -8,7 +8,8 @@
     <fragment
         android:id="@+id/popularFragment"
         android:name="com.example.tmdb_test_app.PopularFragment"
-        android:label="PopularFragment" >
+        android:label="PopularFragment"
+        tools:layout="@layout/movies_list_fragment">
         <action
             android:id="@+id/action_popularFragment_to_movieFragment"
             app:destination="@id/movieFragment">
@@ -20,5 +21,14 @@
         android:label="MovieFragment"
         tools:layout="@layout/whole_movie_fragment"
        />
+    <fragment
+        android:id="@+id/favouriteMoviesListFragment"
+        android:name="com.example.tmdb_test_app.FavouriteMoviesListFragment"
+        android:label="FavouriteMoviesListFragment"
+        tools:layout="@layout/favourite_movies_list">
+        <action
+            android:id="@+id/action_favouriteMoviesListFragment_to_movieFragment"
+            app:destination="@id/movieFragment" />
+    </fragment>
 
 </navigation>

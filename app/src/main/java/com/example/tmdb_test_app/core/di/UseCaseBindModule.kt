@@ -1,9 +1,7 @@
 package com.example.tmdb_test_app.core.di
 
-import com.example.tmdb_test_app.domain.impl.GetMovieAndCastByIdUseCaseImpl
-import com.example.tmdb_test_app.domain.impl.GetPopularMoviesUseCaseImpl
-import com.example.tmdb_test_app.domain.interfaces.GetMovieAndCastByIdUseCase
-import com.example.tmdb_test_app.domain.interfaces.GetPopularMoviesUseCase
+import com.example.tmdb_test_app.domain.impl.*
+import com.example.tmdb_test_app.domain.interfaces.*
 import dagger.Binds
 import dagger.Module
 
@@ -13,6 +11,18 @@ interface UseCaseBindModule {
     fun bindGetMovie(getMovieByIdUseCase: GetMovieAndCastByIdUseCaseImpl): GetMovieAndCastByIdUseCase
 
     @Binds
-    fun bindGetPopular(GetPopularMoviesUseCase: GetPopularMoviesUseCaseImpl): GetPopularMoviesUseCase
+    fun bindGetPopular(getPopularMoviesUseCase: GetPopularMoviesUseCaseImpl): GetPopularMoviesUseCase
+
+    @Binds
+    fun bindAddFavouriteMovie(addFavouriteMovieUseCase: AddFavouriteMovieUseCaseImpl): AddFavouriteMovieUseCase
+
+    @Binds
+    fun bindGetFavouriteMovies(getFavouriteMoviesUseCase: GetFavouriteMoviesUseCaseImpl): GetFavouriteMoviesUseCase
+
+    @Binds
+    fun bindDeleteFavouriteMovie(deleteFavouriteMovieUseCase: DeleteFavouriteMovieUseCaseImpl): DeleteFavouriteMovieUseCase
+
+    @Binds
+    fun bindIsFavourite(isFavouriteMovieCheckUseCase: IsFavouriteMovieCheckUseCaseImpl): IsFavouriteMovieCheckUseCase
 
 }

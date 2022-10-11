@@ -5,5 +5,5 @@ import com.example.tmdb_test_app.data.utils.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface GetMovieAndCastByIdUseCase {
-    suspend operator fun invoke(id: Int): Flow<Resource<MovieAndCast>>
+    suspend operator fun invoke(id: Long): Flow<Resource<MovieAndCast>>
 }

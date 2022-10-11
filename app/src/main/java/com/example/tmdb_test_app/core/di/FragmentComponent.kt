@@ -1,5 +1,6 @@
 package com.example.tmdb_test_app.core.di
 
+import com.example.tmdb_test_app.FavouriteMoviesListFragment
 import com.example.tmdb_test_app.MainActivity
 import com.example.tmdb_test_app.MovieFragment
 import com.example.tmdb_test_app.PopularFragment
@@ -27,6 +28,7 @@ interface FragmentComponent {
     fun inject(mainActivity: MainActivity)
     fun inject(movieFragment: MovieFragment)
     fun inject(popularFragment: PopularFragment)
+    fun inject(popularFragment: FavouriteMoviesListFragment)
 
 
 }

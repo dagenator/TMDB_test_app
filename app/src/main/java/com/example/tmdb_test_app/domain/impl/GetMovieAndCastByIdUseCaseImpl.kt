@@ -5,5 +5,5 @@ import com.example.tmdb_test_app.domain.interfaces.GetMovieAndCastByIdUseCase
 import javax.inject.Inject
 
 class GetMovieAndCastByIdUseCaseImpl @Inject constructor(val tmdbRepository: TMDBRepository) : GetMovieAndCastByIdUseCase {
-    override suspend fun invoke(id: Int) = tmdbRepository.getMovieAndCastById(id)
+    override suspend fun invoke(id: Long) = tmdbRepository.getMovieAndCastById(id)
 }

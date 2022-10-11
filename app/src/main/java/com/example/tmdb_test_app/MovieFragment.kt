@@ -4,10 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -51,6 +48,10 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
         }
     }
 
+    private val favouriteObserver = Observer<Boolean> {
+        setLikeButtonUi(it)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity as MainActivity).fragmentComponent.inject(this)
@@ -58,13 +59,13 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        val movieId = arguments?.getLong("movieId")?.toInt() ?: defaultMovieNumber
+        val movieId = arguments?.getLong("movieId") ?: defaultMovieNumber
 
         viewModel.movie.observe(viewLifecycleOwner, observeGetMovie)
+        viewModel.isMovieFavourite.observe(viewLifecycleOwner,  favouriteObserver)
         viewModel.getMovieAndCastById(movieId)
     }
+
 
     private fun setMovieUi(movie: MovieAndCast) {
         view?.let {
@@ -91,8 +92,31 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
             val swipeLayout = it.findViewById<SwipeRefreshLayout>(R.id.swiperefresh)
             swipeLayout.setOnRefreshListener {
                 Log.i("refresh", "onRefresh called from SwipeRefreshLayout")
-                viewModel.getMovieAndCastById(346)
+                viewModel.getMovieAndCastById(movie.movie.id)
                 swipeLayout.isRefreshing = false
+            }
+
+            val likeButton = it.findViewById<Button>(R.id.addToFavouriteButton)
+            viewModel.checkIsFavourite(movie.movie.id)
+
+            likeButton.setOnClickListener {
+                viewModel.isMovieFavourite.value.let {
+                    if(it == true ) viewModel.deleteFavouriteMovie(movie.movie.id)
+                    else viewModel.addFavouriteMovie(movie.movie)
+                }
+                viewModel.checkIsFavourite(movie.movie.id)
+            }
+        }
+    }
+
+    private fun setLikeButtonUi(isFavourite:Boolean){
+        view?.let {
+            val likeButton = it.findViewById<Button>(R.id.addToFavouriteButton)
+
+            if(isFavourite){
+                likeButton.text = getString(R.string.blue_heart)
+            }else{
+                likeButton.text = getString(R.string.white_heart)
             }
         }
     }
@@ -111,6 +135,6 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
     }
 
     companion object{
-        const val defaultMovieNumber = 345
+        const val defaultMovieNumber:Long = 345
     }
 }
