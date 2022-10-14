@@ -48,7 +48,7 @@ class FavouriteMoviesListFragment @Inject constructor() : Fragment(R.layout.favo
                 recycler.adapter = adapter
                 recycler.layoutManager = LinearLayoutManager(context)
             }
-            if (movies == null) {
+            if (movies == null || movies.isEmpty()) {
                 val error = it.findViewById<TextView>(R.id.favourite_list_error)
                 error.visibility = View.VISIBLE
                 error.text = getString(R.string.none_favourite)

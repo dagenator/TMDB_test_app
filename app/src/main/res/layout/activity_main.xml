@@ -17,35 +17,15 @@
         app:layout_constraintHeight_percent="0.90"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/bottom_nav"
+        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
+        app:menu="@menu/bottom_navigation_menu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.10"
-        app:layout_constraintTop_toBottomOf="@id/nav_host_fragment"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageButton
-            android:id="@+id/to_popular_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintWidth_percent="0.33"
-            app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/ic_baseline_home_24"/>
-        <ImageButton
-            android:id="@+id/to_favourite_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintWidth_percent="0.33"
-            app:layout_constraintStart_toEndOf="@id/to_popular_button"
-            android:src="@drawable/ic_baseline_favorite_24"/>
-        <ImageButton
-            android:id="@+id/to_random_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            app:layout_constraintWidth_percent="0.33"
-            app:layout_constraintStart_toEndOf="@id/to_favourite_button"
-            android:src="@drawable/ic_baseline_movie_filter_24"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintHeight_percent="0.10"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

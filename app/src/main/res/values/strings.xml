@@ -5,4 +5,8 @@
     <string name="blue_heart">💙</string>
     <string name="red_heart">❤</string>
     <string name="none_favourite">Zero favourite movies(</string>
+    <string name="home">Home</string>
+    <string name="favourite">Favourite</string>
+    <string name="random_movie">Random Movie</string>
+    <string name="popular">Popular</string>
 </resources>
