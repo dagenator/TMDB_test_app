@@ -1,5 +1,6 @@
 package com.example.tmdb_test_app.core.pagination
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.tmdb_test_app.core.retrofit.TMDBApiService
@@ -23,6 +24,7 @@ class PopularMoviesPageSource @Inject constructor(
             val page = params.key ?: 1
             val response = tmdbApiService.getPopularMovies(config.apiKey, page)
             val movies = response.results
+            Log.i("length_tag", "getPopularMovies: ${movies.size}")
             val nextPageNumber = if (movies.isEmpty()) null else page + 1
             val prevPageNumber = if (page > 1) page - 1 else null
             return LoadResult.Page(movies, prevPageNumber, nextPageNumber)

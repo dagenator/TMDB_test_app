@@ -1,6 +1,6 @@
 package com.example.tmdb_test_app.domain.impl
 
-import com.example.tmdb_test_app.data.models.PopularMovies
+import com.example.tmdb_test_app.data.models.PaginateMovies
 import com.example.tmdb_test_app.data.repository.TMDBRepository
 import com.example.tmdb_test_app.data.utils.Resource
 import com.example.tmdb_test_app.domain.interfaces.GetPopularMoviesUseCase
@@ -9,6 +9,6 @@ import javax.inject.Inject
 
 class GetPopularMoviesUseCaseImpl @Inject constructor(val tmdbRepository: TMDBRepository) :
     GetPopularMoviesUseCase {
-    override suspend fun invoke(page: Int): Flow<Resource<PopularMovies>> =
+    override suspend fun invoke(page: Int): Flow<Resource<PaginateMovies>> =
         tmdbRepository.getPopularMovies(page)
 }

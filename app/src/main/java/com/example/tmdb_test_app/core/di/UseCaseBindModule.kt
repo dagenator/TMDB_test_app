@@ -25,4 +25,10 @@ interface UseCaseBindModule {
     @Binds
     fun bindIsFavourite(isFavouriteMovieCheckUseCase: IsFavouriteMovieCheckUseCaseImpl): IsFavouriteMovieCheckUseCase
 
+    @Binds
+    fun bindGetGenresListUseCase(getGenresListUseCase: GetGenresListUseCaseImpl): GetGenresListUseCase
+
+    @Binds
+    fun bindGetRandomMovieByGenreAndYear(getRandomMovieByGenreAndYear: GetRandomMovieByGenreAndYearImpl): GetRandomMovieByGenreAndYear
+
 }

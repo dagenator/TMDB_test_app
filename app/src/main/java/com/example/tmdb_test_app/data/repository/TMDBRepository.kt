@@ -1,6 +1,8 @@
 package com.example.tmdb_test_app.data.repository
 
 import android.util.Log
+import androidx.room.Query
+import com.example.tmdb_test_app.core.bd.GenreDao
 import com.example.tmdb_test_app.core.bd.MovieDao
 import com.example.tmdb_test_app.core.retrofit.TMDBApiService
 import com.example.tmdb_test_app.data.models.*
@@ -12,11 +14,13 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.random.Random
 
 class TMDBRepository @Inject constructor(
     val tmdbApiService: TMDBApiService,
     val config: Config,
-    val movieDao: MovieDao
+    val movieDao: MovieDao,
+    val genreDao: GenreDao
 ) {
 
     suspend fun getMovieAndCastById(id: Long) =
@@ -34,7 +38,7 @@ class TMDBRepository @Inject constructor(
         }
 
     suspend fun getPopularMovies(page: Int) =
-        flow<Resource<PopularMovies>> {
+        flow<Resource<PaginateMovies>> {
             emit(Resource.loading(data = null))
 
             val movies = CoroutineScope(Dispatchers.IO).async {
@@ -42,6 +46,27 @@ class TMDBRepository @Inject constructor(
             }.await()
 
             emit(Resource.success(movies))
+        }.catch { e ->
+            emit(Resource.error(message = e.message ?: "Error Occurred!"))
+        }
+
+    suspend fun getRandomMovieByGenreAndYear(genre: Genre, year:Int) =
+        flow<Resource<Long>> {
+            emit(Resource.loading(data = null))
+
+            val id = CoroutineScope(Dispatchers.IO).async {
+
+                val page = tmdbApiService.getMovieListByQueryAndYear(config.apiKey, 1,  genre.name,year)
+                val randomIndex = Random.nextInt(0, page.totalResults.toInt())
+                val randomPage = randomIndex/config.itemsOnPage
+                val randomResultIndex = randomIndex%config.itemsOnPage
+                val wishPage = tmdbApiService.getMovieListByQueryAndYear(config.apiKey, randomPage,  genre.name,year)
+                val result = wishPage.results[randomResultIndex].id
+
+                return@async result
+            }.await()
+
+            emit(Resource.success(id))
         }.catch { e ->
             emit(Resource.error(message = e.message ?: "Error Occurred!"))
         }
@@ -92,5 +117,25 @@ class TMDBRepository @Inject constructor(
             return@withContext res != null
         }
     }
+
+    suspend fun getGenres():List<Genre> {
+        return withContext(Dispatchers.IO) {
+            var genres = genreDao.getGenres()
+            if(genres.isEmpty()){
+                genres = tmdbApiService.getGenreList(config.apiKey).genres
+
+                if(genres.isEmpty()){
+                    return@withContext emptyList()
+                }
+                else{
+                    return@withContext genres
+                }
+            }else{
+                return@withContext genres
+            }
+        }
+    }
+
+
 
 }

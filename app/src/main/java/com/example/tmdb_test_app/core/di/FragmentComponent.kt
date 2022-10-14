@@ -4,7 +4,6 @@ import com.example.tmdb_test_app.FavouriteMoviesListFragment
 import com.example.tmdb_test_app.MainActivity
 import com.example.tmdb_test_app.MovieFragment
 import com.example.tmdb_test_app.PopularFragment
-import com.example.tmdb_test_app.data.models.PopularMovies
 import dagger.Subcomponent
 
 @ActivityScope

@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdb_test_app.data.models.Config
-import com.example.tmdb_test_app.data.models.PopularMovies
+import com.example.tmdb_test_app.data.models.PaginateMovies
 import com.example.tmdb_test_app.data.utils.Resource
 import com.example.tmdb_test_app.data.utils.Status
 import com.example.tmdb_test_app.presenter.MainViewModel
@@ -27,7 +27,7 @@ class PopularFragment @Inject constructor() : Fragment(R.layout.movies_list_frag
     @Inject
     lateinit var config: Config
 
-    private val observePopular = Observer<Resource<PopularMovies>> {
+    private val observePopular = Observer<Resource<PaginateMovies>> {
         it?.let {
             when (it.status) {
                 Status.LOADING -> {
@@ -72,7 +72,7 @@ class PopularFragment @Inject constructor() : Fragment(R.layout.movies_list_frag
         }
     }
 
-    private fun setMovieUi(movie: PopularMovies) {
+    private fun setMovieUi(movie: PaginateMovies) {
         view?.let {
 //            val swipeLayout = it.findViewById<SwipeRefreshLayout>(R.id.movie_list_refresh)
 //            swipeLayout.setOnRefreshListener {
