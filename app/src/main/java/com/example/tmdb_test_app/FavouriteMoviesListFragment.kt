@@ -4,8 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdb_test_app.data.models.Config
@@ -42,7 +44,7 @@ class FavouriteMoviesListFragment @Inject constructor() : Fragment(R.layout.favo
         view?.let {
             movies?.let { movies ->
                 val recycler = it.findViewById<RecyclerView>(R.id.favourite_list)
-                val adapter = FavouriteListAdapter(movies.toTypedArray(), this)
+                val adapter = FavouriteListAdapter(movies.toTypedArray()) { x -> viewModel.navigateToMovieById(x, this) }
                 recycler.adapter = adapter
                 recycler.layoutManager = LinearLayoutManager(context)
             }

@@ -6,24 +6,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.tmdb_test_app.R
 import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.Movie
 
 class MovieListAdapter(
     private val config: Config,
-    private val context: Fragment
+    private val click: (movieId: Long) -> Unit,
+    private val imageLoad: (url: String?, imageView: ImageView, width: Int, height: Int) -> Unit
 ) :
     PagingDataAdapter<Movie, MovieListAdapter.MovieViewHolder>(MovieDiffItemCallback) {
-
 
     class MovieViewHolder(val view: View) :
         RecyclerView.ViewHolder(view) {
@@ -41,33 +36,21 @@ class MovieListAdapter(
             movieRow = view.findViewById(R.id.movie_row)
         }
 
-        fun bind(movie: Movie?, context: Fragment, config: Config) {
+        fun bind(
+            movie: Movie?,
+            click: (movieId: Long) -> Unit,
+            imageLoad: (url: String?, imageView: ImageView, width: Int, height: Int) -> Unit,
+            config: Config
+        ) {
+            val url =  if(movie == null) null else config.imageUrl + movie.posterPath
+            imageLoad(url, movieRowPoster, 100, 200)
 
-            movie?.let {
-                val url = config.imageUrl + movie.posterPath
-                Glide
-                    .with(context)
-                    .load(url)
-                    .error(R.drawable.no_image)
-                    .apply(RequestOptions().override(100, 200))
-                    .into(movieRowPoster)
-            }
-
-            if (movie == null) {
-                Glide
-                    .with(context)
-                    .load(R.drawable.no_image)
-                    .apply(RequestOptions().override(100, 200))
-                    .into(movieRowPoster)
-            }
             movieRowName.text = movie?.title
             movieRowData.text = movie?.releaseDate
             movieRowScore.text = movie?.voteAverage.toString()
 
             movieRow.setOnClickListener {
-                val navController = context.findNavController()
-                val bundle = bundleOf("movieId" to movie?.id)
-                navController.navigate(R.id.movieFragment, bundle)
+                movie?.id?.let { x -> click(x) }
             }
         }
     }
@@ -80,7 +63,7 @@ class MovieListAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bind(getItem(position), context, config)
+        holder.bind(getItem(position), click, imageLoad, config)
     }
 
 }

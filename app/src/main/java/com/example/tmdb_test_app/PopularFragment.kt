@@ -5,14 +5,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.PopularMovies
 import com.example.tmdb_test_app.data.utils.Resource
@@ -51,7 +48,10 @@ class PopularFragment @Inject constructor() : Fragment(R.layout.movies_list_frag
     }
 
     private val adapter by lazy(LazyThreadSafetyMode.NONE) {
-        MovieListAdapter(config, this)
+        MovieListAdapter(
+            config,
+            { x -> viewModel.navigateToMovieById(x, this) },
+            { url, image, width, height -> viewModel.loadImage(url, this, width, height, image) })
     }
 
     override fun onAttach(context: Context) {
@@ -66,7 +66,7 @@ class PopularFragment @Inject constructor() : Fragment(R.layout.movies_list_frag
         recycler.layoutManager = LinearLayoutManager(context)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.popular.collectLatest{ pagingData ->
+            viewModel.popular.collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
         }

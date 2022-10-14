@@ -3,7 +3,6 @@ package com.example.tmdb_test_app
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.tmdb_test_app.core.app.App
 import com.example.tmdb_test_app.core.di.FragmentComponent
@@ -18,19 +17,18 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
         fragmentComponent = (applicationContext as App)
             .appComponent.fragmentComponent().create()
 
         fragmentComponent.inject(this)
 
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setButtonsAction()
-
     }
 
-    fun setButtonsAction(){
+    fun setButtonsAction() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController

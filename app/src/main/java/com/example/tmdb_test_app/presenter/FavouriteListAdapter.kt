@@ -1,6 +1,5 @@
 package com.example.tmdb_test_app.presenter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdb_test_app.R
 import com.example.tmdb_test_app.data.models.DBMovie
 
-class FavouriteListAdapter(private val dataSet: Array<DBMovie>,private val context: Fragment) :
+class FavouriteListAdapter(private val dataSet: Array<DBMovie>, private val click: (movieId: Long) -> Unit) :
     RecyclerView.Adapter<FavouriteListAdapter.FavouriteMovieViewHolder>() {
 
     class FavouriteMovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -46,9 +45,10 @@ class FavouriteListAdapter(private val dataSet: Array<DBMovie>,private val conte
         view.score.text = dataSet[position].voteAverage.toString()
 
         view.row.setOnClickListener {
-            val navController = context.findNavController()
-            val bundle = bundleOf("movieId" to dataSet[position].id)
-            navController.navigate(R.id.movieFragment, bundle)
+            click(dataSet[position].id)
+//            val navController = context.findNavController()
+//            val bundle = bundleOf("movieId" to dataSet[position].id)
+//            navController.navigate(R.id.movieFragment, bundle)
         }
     }
 
