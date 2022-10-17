@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.tmdb_test_app.data.models.Config
@@ -15,6 +17,7 @@ import com.example.tmdb_test_app.data.utils.Resource
 import com.example.tmdb_test_app.data.utils.Status
 import com.example.tmdb_test_app.databinding.RandomFragmentBinding
 import com.example.tmdb_test_app.presenter.MainViewModel
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 class RandomFragment @Inject constructor() : Fragment(R.layout.random_fragment) {
@@ -24,14 +27,14 @@ class RandomFragment @Inject constructor() : Fragment(R.layout.random_fragment) 
     @Inject
     lateinit var config: Config
 
-    private var binding:RandomFragmentBinding? = null
+    private var binding: RandomFragmentBinding? = null
 
-    private val genreObserve = Observer<List<Genre>>{
+    private val genreObserve = Observer<List<Genre>> {
         val genres = it.map { x -> x.name }
         setUi(genres)
     }
 
-    private val randomMovieObserve = Observer<Resource<Movie>>{
+    private val randomMovieObserve = Observer<Resource<Movie>> {
         it?.let {
             when (it.status) {
                 Status.LOADING -> {
@@ -75,23 +78,27 @@ class RandomFragment @Inject constructor() : Fragment(R.layout.random_fragment) 
     }
 
     private fun setUi(genres: List<String>) {
-        view?.let {view->
+        view?.let { view ->
 
             binding?.let { binding ->
                 context?.let {
-                    val adapter: ArrayAdapter<String> = ArrayAdapter(it, R.layout.one_string_row_layout, genres)
+                    val adapter: ArrayAdapter<String> =
+                        ArrayAdapter(it, R.layout.one_string_row_layout, genres)
                     binding.genreDropdown.adapter = adapter
                 }
                 val yearInput = view.findViewById<EditText>(R.id.year_input)
                 binding.randomFindButton.setOnClickListener {
-                    viewModel.getRandomMovie( genre = binding.genreDropdown.selectedItem.toString(), year = yearInput.text.toString().toInt())
+                    viewModel.getRandomMovie(
+                        genre = binding.genreDropdown.selectedItem.toString(),
+                        year = fillIfYearInputEmpty(yearInput.text.toString())
+                    )
                     setLoader(true)
                 }
             }
         }
     }
 
-    private fun setRandomMovieUI(movie: Movie){
+    private fun setRandomMovieUI(movie: Movie) {
         binding?.let {
             it.randomMovieContainer.visibility = View.VISIBLE
             it.randomMovieContainer.setOnRefreshListener {
@@ -120,6 +127,11 @@ class RandomFragment @Inject constructor() : Fragment(R.layout.random_fragment) 
 
     private fun showError(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show()
+    }
+
+    private fun fillIfYearInputEmpty(year: String): Int {
+        return if(year == "" || year.toIntOrNull() == null) LocalDateTime.now().year
+        else year.toInt()
     }
 
 }
