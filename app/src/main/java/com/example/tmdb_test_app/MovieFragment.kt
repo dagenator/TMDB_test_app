@@ -11,8 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.MovieAndCast
 import com.example.tmdb_test_app.data.utils.Resource
@@ -23,8 +21,12 @@ import javax.inject.Inject
 
 class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragment) {
 
-    @Inject lateinit var viewModel: MainViewModel
-    @Inject lateinit var config: Config
+    @Inject
+    lateinit var viewModel: MainViewModel
+
+    @Inject
+    lateinit var config: Config
+
 
     private val observeGetMovie = Observer<Resource<MovieAndCast>> {
         it?.let {
@@ -62,7 +64,7 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
         val movieId = arguments?.getLong("movieId") ?: defaultMovieNumber
 
         viewModel.movie.observe(viewLifecycleOwner, observeGetMovie)
-        viewModel.isMovieFavourite.observe(viewLifecycleOwner,  favouriteObserver)
+        viewModel.isMovieFavourite.observe(viewLifecycleOwner, favouriteObserver)
         viewModel.getMovieAndCastById(movieId)
     }
 
@@ -72,7 +74,8 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
             val image = it.findViewById<ImageView>(R.id.picture)
 
             it.findViewById<TextView>(R.id.name).text = movie.movie.title
-            it.findViewById<TextView>(R.id.genre).text = movie.movie.genres.joinToString { x-> x.name }
+            it.findViewById<TextView>(R.id.genre).text =
+                movie.movie.genres.joinToString { x -> x.name }
             it.findViewById<TextView>(R.id.description).text = movie.movie.overview
             it.findViewById<TextView>(R.id.date).text = movie.movie.releaseDate
             it.findViewById<TextView>(R.id.score).text = movie.movie.voteAverage.toString()
@@ -81,13 +84,8 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
             recycler.layoutManager = LinearLayoutManager(context)
             recycler.adapter = adapter
 
-            val url = config.imageUrl+movie.movie.posterPath
-            Glide
-                .with(this)
-                .load(url)
-                .error(R.drawable.no_image)
-                .apply( RequestOptions().override(700, 900))
-                .into(image)
+
+            viewModel.loadImage(config.imageUrl + movie.movie.posterPath, this, image)
 
             val swipeLayout = it.findViewById<SwipeRefreshLayout>(R.id.swiperefresh)
             swipeLayout.setOnRefreshListener {
@@ -101,7 +99,7 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
 
             likeButton.setOnClickListener {
                 viewModel.isMovieFavourite.value.let {
-                    if(it == true ) viewModel.deleteFavouriteMovie(movie.movie.id)
+                    if (it == true) viewModel.deleteFavouriteMovie(movie.movie.id)
                     else viewModel.addFavouriteMovie(movie.movie)
                 }
                 viewModel.checkIsFavourite(movie.movie.id)
@@ -109,13 +107,13 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
         }
     }
 
-    private fun setLikeButtonUi(isFavourite:Boolean){
+    private fun setLikeButtonUi(isFavourite: Boolean) {
         view?.let {
             val likeButton = it.findViewById<Button>(R.id.addToFavouriteButton)
 
-            if(isFavourite){
+            if (isFavourite) {
                 likeButton.text = getString(R.string.blue_heart)
-            }else{
+            } else {
                 likeButton.text = getString(R.string.white_heart)
             }
         }
@@ -134,7 +132,8 @@ class MovieFragment @Inject constructor() : Fragment(R.layout.whole_movie_fragme
         Toast.makeText(context, text, Toast.LENGTH_LONG).show()
     }
 
-    companion object{
-        const val defaultMovieNumber:Long = 345
+    companion object {
+        const val defaultMovieNumber: Long = 345
+
     }
 }

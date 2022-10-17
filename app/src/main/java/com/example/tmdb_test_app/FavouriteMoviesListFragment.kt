@@ -3,11 +3,10 @@ package com.example.tmdb_test_app
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdb_test_app.data.models.Config
@@ -26,11 +25,13 @@ class FavouriteMoviesListFragment @Inject constructor() : Fragment(R.layout.favo
 
     private val observePopularMovies = Observer<List<DBMovie>?> {
         setFavouriteUi(it)
+        setLoader(false)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity as MainActivity).fragmentComponent.inject(this)
+        setLoader(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,13 +39,16 @@ class FavouriteMoviesListFragment @Inject constructor() : Fragment(R.layout.favo
 
         viewModel.favourite.observe(viewLifecycleOwner, observePopularMovies)
         viewModel.getFavouriteMoviesFromDB()
+
     }
 
     private fun setFavouriteUi(movies: List<DBMovie>?) {
         view?.let {
             movies?.let { movies ->
                 val recycler = it.findViewById<RecyclerView>(R.id.favourite_list)
-                val adapter = FavouriteListAdapter(movies.toTypedArray()) { x -> viewModel.navigateToMovieById(x, this) }
+                val adapter = FavouriteListAdapter(movies.toTypedArray()) { x ->
+                    viewModel.navigateToMovieById(x, this)
+                }
                 recycler.adapter = adapter
                 recycler.layoutManager = LinearLayoutManager(context)
             }
@@ -55,5 +59,15 @@ class FavouriteMoviesListFragment @Inject constructor() : Fragment(R.layout.favo
             }
         }
     }
+
+    private fun setLoader(isLoading: Boolean) {
+        view?.let {
+            val progressBar = it.findViewById<ProgressBar>(R.id.favourite_progress_bar)
+            val container = it.findViewById<RecyclerView>(R.id.favourite_list)
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            container.visibility = if (isLoading) View.GONE else View.VISIBLE
+        }
+    }
+
 
 }

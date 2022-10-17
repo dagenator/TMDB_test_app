@@ -46,9 +46,6 @@ class FavouriteListAdapter(private val dataSet: Array<DBMovie>, private val clic
 
         view.row.setOnClickListener {
             click(dataSet[position].id)
-//            val navController = context.findNavController()
-//            val bundle = bundleOf("movieId" to dataSet[position].id)
-//            navController.navigate(R.id.movieFragment, bundle)
         }
     }
 

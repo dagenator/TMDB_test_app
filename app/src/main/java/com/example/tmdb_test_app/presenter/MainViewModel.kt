@@ -18,11 +18,13 @@ import com.example.tmdb_test_app.R
 import com.example.tmdb_test_app.core.di.ActivityScope
 import com.example.tmdb_test_app.core.pagination.PopularMoviesPageSource
 import com.example.tmdb_test_app.data.models.DBMovie
+import com.example.tmdb_test_app.data.models.Genre
 import com.example.tmdb_test_app.data.models.Movie
 import com.example.tmdb_test_app.data.models.MovieAndCast
 import com.example.tmdb_test_app.data.utils.Resource
 import com.example.tmdb_test_app.domain.interfaces.*
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,13 +36,17 @@ class MainViewModel @Inject constructor(
     val getFavouriteMoviesUseCase: GetFavouriteMoviesUseCase,
     val addFavouriteMovieUseCase: AddFavouriteMovieUseCase,
     val deleteFavouriteMovieUseCase: DeleteFavouriteMovieUseCase,
-    val isFavouriteMovieCheckUseCase: IsFavouriteMovieCheckUseCase
+    val isFavouriteMovieCheckUseCase: IsFavouriteMovieCheckUseCase,
+    val genresListUseCase: GetGenresListUseCase,
+    val randomMovieByGenreAndYear: GetRandomMovieByGenreAndYear
 ) :
     ViewModel() {
 
     val movie = MutableLiveData<Resource<MovieAndCast>>()
     val favourite = MutableLiveData<List<DBMovie>?>()
     val isMovieFavourite = MutableLiveData<Boolean>(false)
+    val genres = MutableLiveData<List<Genre>>()
+    val randomMovie = MutableLiveData<Resource<Movie>>()
 
     val popular = Pager(PagingConfig(pageSize = 20)) {
         popularMoviesPageSource
@@ -90,20 +96,35 @@ class MainViewModel @Inject constructor(
         navController.navigate(R.id.movieFragment, bundle)
     }
 
-    fun loadImage(url: String? = null, fragment: Fragment, width:Int, height:Int, imageView: ImageView){
+    fun loadImage(url: String? = null, fragment: Fragment,  imageView: ImageView, width:Int = 100, height:Int= 200){
         if (url == null){
             Glide
                 .with(fragment)
                 .load(error_image)
-                .apply(RequestOptions().override(100, 200))
+                .apply(RequestOptions().override(width, height))
                 .into(imageView)
         }else {
             Glide
                 .with(fragment)
                 .load(url)
                 .error(error_image)
-                .apply(RequestOptions().override(100, 200))
+                .apply(RequestOptions().override(width, height))
                 .into(imageView)
+        }
+    }
+
+    fun uploadGenres(){
+        viewModelScope.launch {
+            genres.value = genresListUseCase() ?: emptyList()
+        }
+    }
+
+    fun getRandomMovie(genre: String, year:Int){
+        Log.i("randomMovie", "getRandomMovie: $genre , $year ")
+        viewModelScope.launch {
+            randomMovieByGenreAndYear(genre, year).collect{
+                randomMovie.value = it
+            }
         }
     }
 

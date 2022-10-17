@@ -7,5 +7,5 @@ import javax.inject.Inject
 
 class GetGenresListUseCaseImpl @Inject constructor(val tmdbRepository: TMDBRepository) :
     GetGenresListUseCase {
-    override suspend fun invoke(id: Long): List<Genre> = tmdbRepository.getGenres()
+    override suspend fun invoke(): List<Genre> = tmdbRepository.getGenres()
 }

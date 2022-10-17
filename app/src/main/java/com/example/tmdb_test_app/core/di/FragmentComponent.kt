@@ -1,9 +1,6 @@
 package com.example.tmdb_test_app.core.di
 
-import com.example.tmdb_test_app.FavouriteMoviesListFragment
-import com.example.tmdb_test_app.MainActivity
-import com.example.tmdb_test_app.MovieFragment
-import com.example.tmdb_test_app.PopularFragment
+import com.example.tmdb_test_app.*
 import dagger.Subcomponent
 
 @ActivityScope
@@ -28,6 +25,6 @@ interface FragmentComponent {
     fun inject(movieFragment: MovieFragment)
     fun inject(popularFragment: PopularFragment)
     fun inject(popularFragment: FavouriteMoviesListFragment)
-
+    fun inject(randomFragment: RandomFragment)
 
 }

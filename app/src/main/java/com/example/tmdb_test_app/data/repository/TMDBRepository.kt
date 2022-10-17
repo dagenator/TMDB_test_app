@@ -1,7 +1,6 @@
 package com.example.tmdb_test_app.data.repository
 
 import android.util.Log
-import androidx.room.Query
 import com.example.tmdb_test_app.core.bd.GenreDao
 import com.example.tmdb_test_app.core.bd.MovieDao
 import com.example.tmdb_test_app.core.retrofit.TMDBApiService
@@ -50,20 +49,27 @@ class TMDBRepository @Inject constructor(
             emit(Resource.error(message = e.message ?: "Error Occurred!"))
         }
 
-    suspend fun getRandomMovieByGenreAndYear(genre: Genre, year:Int) =
-        flow<Resource<Long>> {
+    suspend fun getRandomMovieByGenreAndYear(genre: String, year:Int) =
+        flow {
             emit(Resource.loading(data = null))
 
             val id = CoroutineScope(Dispatchers.IO).async {
 
-                val page = tmdbApiService.getMovieListByQueryAndYear(config.apiKey, 1,  genre.name,year)
-                val randomIndex = Random.nextInt(0, page.totalResults.toInt())
-                val randomPage = randomIndex/config.itemsOnPage
-                val randomResultIndex = randomIndex%config.itemsOnPage
-                val wishPage = tmdbApiService.getMovieListByQueryAndYear(config.apiKey, randomPage,  genre.name,year)
-                val result = wishPage.results[randomResultIndex].id
+                var page = tmdbApiService.getMovieListByQueryAndYear(config.apiKey, 1, genre, year)
+                if(page.totalPages != 1){
+                    val randomPageIndex  = Random.nextInt(1, page.totalPages.toInt())
+                    if (randomPageIndex != page.page.toInt()) {
+                        page = tmdbApiService.getMovieListByQueryAndYear(
+                            config.apiKey,
+                            randomPageIndex,
+                            genre,
+                            year
+                        )
+                    }
+                }
 
-                return@async result
+                val randomResultIndex = if(page.results.size > 1) Random.nextInt(1, page.results.size) else 1
+                return@async page.results[randomResultIndex]
             }.await()
 
             emit(Resource.success(id))

@@ -30,5 +30,14 @@
             android:id="@+id/action_favouriteMoviesListFragment_to_movieFragment"
             app:destination="@id/movieFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/randomFragmentNav"
+        android:name="com.example.tmdb_test_app.RandomFragment"
+        android:label="RandomFragment"
+        tools:layout="@layout/random_fragment">
+        <action
+            android:id="@+id/action_randomFragment2_to_movieFragment"
+            app:destination="@id/movieFragment" />
+    </fragment>
 
 </navigation>
