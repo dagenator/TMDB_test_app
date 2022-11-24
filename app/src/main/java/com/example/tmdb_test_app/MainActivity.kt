@@ -1,13 +1,12 @@
 package com.example.tmdb_test_app
 
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.tmdb_test_app.core.app.App
 import com.example.tmdb_test_app.core.di.FragmentComponent
-import com.example.tmdb_test_app.presenter.MainViewModel
+import com.example.tmdb_test_app.presenter.MovieViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import javax.inject.Inject
 
@@ -16,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var fragmentComponent: FragmentComponent
 
     @Inject
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModel: MovieViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -28,8 +27,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setBottomMenu()
-
-
     }
 
     private fun setBottomMenu() {

@@ -16,13 +16,13 @@ import com.example.tmdb_test_app.data.models.Movie
 import com.example.tmdb_test_app.data.utils.Resource
 import com.example.tmdb_test_app.data.utils.Status
 import com.example.tmdb_test_app.databinding.RandomFragmentBinding
-import com.example.tmdb_test_app.presenter.MainViewModel
+import com.example.tmdb_test_app.presenter.MovieViewModel
 import java.time.LocalDateTime
 import javax.inject.Inject
 
 class RandomFragment @Inject constructor() : Fragment(R.layout.random_fragment) {
     @Inject
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModel: MovieViewModel
 
     @Inject
     lateinit var config: Config

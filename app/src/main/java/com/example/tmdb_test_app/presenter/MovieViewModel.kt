@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.tmdb_test_app.R
 import com.example.tmdb_test_app.core.di.ActivityScope
+import com.example.tmdb_test_app.core.pagination.TopRatedMoviesPageSource
 import com.example.tmdb_test_app.core.pagination.PopularMoviesPageSource
 import com.example.tmdb_test_app.data.models.DBMovie
 import com.example.tmdb_test_app.data.models.Genre
@@ -24,24 +25,23 @@ import com.example.tmdb_test_app.data.models.MovieAndCast
 import com.example.tmdb_test_app.data.utils.Resource
 import com.example.tmdb_test_app.domain.interfaces.*
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @ActivityScope
-class MainViewModel @Inject constructor(
-    val getMovieAndCastByIdUseCase: GetMovieAndCastByIdUseCase,
-    val popularMoviesPageSource: PopularMoviesPageSource,
-    val getFavouriteMoviesUseCase: GetFavouriteMoviesUseCase,
-    val addFavouriteMovieUseCase: AddFavouriteMovieUseCase,
-    val deleteFavouriteMovieUseCase: DeleteFavouriteMovieUseCase,
-    val isFavouriteMovieCheckUseCase: IsFavouriteMovieCheckUseCase,
-    val genresListUseCase: GetGenresListUseCase,
-    val randomMovieByGenreAndYear: GetRandomMovieByGenreAndYear
+class MovieViewModel @Inject constructor(
+    private val getMovieAndCastByIdUseCase: GetMovieAndCastByIdUseCase,
+    private val popularMoviesPageSource: PopularMoviesPageSource,
+    private val topRatedMoviesPageSource: TopRatedMoviesPageSource,
+    private val getFavouriteMoviesUseCase: GetFavouriteMoviesUseCase,
+    private val addFavouriteMovieUseCase: AddFavouriteMovieUseCase,
+    private val deleteFavouriteMovieUseCase: DeleteFavouriteMovieUseCase,
+    private val isFavouriteMovieCheckUseCase: IsFavouriteMovieCheckUseCase,
+    private val genresListUseCase: GetGenresListUseCase,
+    private val randomMovieByGenreAndYear: GetRandomMovieByGenreAndYear
 ) :
     ViewModel() {
-
     val movie = MutableLiveData<Resource<MovieAndCast>>()
     val favourite = MutableLiveData<List<DBMovie>?>()
     val isMovieFavourite = MutableLiveData<Boolean>(false)
@@ -54,6 +54,12 @@ class MainViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
         .cachedIn(viewModelScope)
 
+    val topRated = Pager(PagingConfig(pageSize = 20)) {
+        topRatedMoviesPageSource
+    }.flow
+        .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+        .cachedIn(viewModelScope)
+
 
     fun getMovieAndCastById(id: Long) {
         viewModelScope.launch {
@@ -62,7 +68,6 @@ class MainViewModel @Inject constructor(
                     movie.value = it
                     Log.i("tag", "getMovieById: $it")
                 }
-
         }
     }
 

@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.DBMovie
 import com.example.tmdb_test_app.presenter.FavouriteListAdapter
-import com.example.tmdb_test_app.presenter.MainViewModel
+import com.example.tmdb_test_app.presenter.MovieViewModel
 import javax.inject.Inject
 
 class FavouriteMoviesListFragment @Inject constructor() : Fragment(R.layout.favourite_movies_list) {
 
     @Inject
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModel: MovieViewModel
 
     @Inject
     lateinit var config: Config

@@ -27,6 +27,12 @@ interface TMDBApiService {
         @Query("page") page: Int
     ): PaginateMovies
 
+    @GET("/3/movie/top_rated")
+    suspend fun getTopRated(
+        @Query("api_key") key: String,
+        @Query("page") page: Int
+    ): PaginateMovies
+
     @GET("/3/search/movie") //
     suspend fun getMovieListByQueryAndYear(
         @Query("api_key") key: String,
