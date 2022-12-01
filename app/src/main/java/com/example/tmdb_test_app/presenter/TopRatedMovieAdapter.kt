@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.clear
 import com.example.tmdb_test_app.R
 import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.Movie
@@ -28,11 +29,15 @@ class TopRatedMovieAdapter(
             imageLoad: (url: String?, imageView: ImageView, width: Int, height: Int) -> Unit,
             config: Config
         ) {
-            val url =  if(movie == null) null else config.imageUrl + movie.posterPath
+            val url = if (movie == null) null else config.imageUrl + movie.posterPath
             imageLoad(url, poster, 100, 200)
-            poster.setOnClickListener{
+            poster.setOnClickListener {
                 movie?.id?.let { x -> click(x) }
             }
+        }
+
+        fun cleanup(){
+            poster.clear()
         }
     }
 
@@ -44,6 +49,11 @@ class TopRatedMovieAdapter(
 
     override fun onBindViewHolder(holder: PosterViewHolder, position: Int) {
         holder.bind(getItem(position), click, imageLoader, config)
+    }
+
+    override fun onViewRecycled(holder: PosterViewHolder) {
+        super.onViewRecycled(holder)
+        holder.cleanup()
     }
 }
 

@@ -14,6 +14,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.clear
 import com.example.tmdb_test_app.R
 import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.Movie
@@ -65,6 +66,10 @@ class MovieListAdapter(
                 latestMoviesRecyclerInit(recycler, prepend, append)
             }
         }
+
+        fun cleanup() {
+            movieRowPoster.clear()
+        }
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): MovieViewHolder {
@@ -84,6 +89,11 @@ class MovieListAdapter(
             latestMoviesRecyclerInit
         )
     }
+    override fun onViewRecycled(holder: MovieViewHolder) {
+        super.onViewRecycled(holder)
+        holder.cleanup()
+    }
+
 }
 
 object PopularMovieDiffItemCallback : DiffUtil.ItemCallback<Movie>() {
