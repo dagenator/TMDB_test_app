@@ -1,46 +1,45 @@
 package com.example.tmdb_test_app.presenter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdb_test_app.R
 import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.Movie
+import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class MovieListAdapter(
     private val config: Config,
     private val click: (movieId: Long) -> Unit,
     private val imageLoader: (url: String?, imageView: ImageView, width: Int, height: Int) -> Unit,
     private val latestMoviesHolderIndex: Int,
-    private val latestMoviesRecyclerInit: (recycler: RecyclerView) -> Unit
+    private val latestMoviesRecyclerInit: (recycler: RecyclerView, prepend:LinearProgressIndicator,append:LinearProgressIndicator) -> Unit
 ) :
     PagingDataAdapter<Movie, MovieListAdapter.MovieViewHolder>(PopularMovieDiffItemCallback) {
 
     class MovieViewHolder(private val view: View) :
         RecyclerView.ViewHolder(view) {
-        val movieRowPoster: ImageView
-        val movieRowName: TextView
-        val movieRowScore: TextView
-        val movieRowData: TextView
-        val movieRow: ConstraintLayout
-        val recycler: RecyclerView
-        val recyclerWrapper: ConstraintLayout
+        private val movieRowPoster: ImageView = view.findViewById(R.id.movie_row_poster)
+        private val movieRowName: TextView = view.findViewById(R.id.movie_row_name)
+        private val movieRowScore: TextView = view.findViewById(R.id.movie_row_score)
+        private val movieRowData: TextView = view.findViewById(R.id.movie_row_data)
+        private val movieRow: ConstraintLayout = view.findViewById(R.id.movie_row_wrapper)
+        private val recycler: RecyclerView = view.findViewById(R.id.posters_recycler_view)
+        private val recyclerWrapper: ConstraintLayout = view.findViewById(R.id.posters_recycler_view_wrapper)
+        private val prepend:LinearProgressIndicator = view.findViewById(R.id.prepend_progress)
+        private val append:LinearProgressIndicator = view.findViewById(R.id.append_progress)
 
-        init {
-            movieRowPoster = view.findViewById(R.id.movie_row_poster)
-            movieRowName = view.findViewById(R.id.movie_row_name)
-            movieRowScore = view.findViewById(R.id.movie_row_score)
-            movieRowData = view.findViewById(R.id.movie_row_data)
-            movieRow = view.findViewById(R.id.movie_row_wrapper)
-            recycler = view.findViewById(R.id.posters_recycler_view)
-            recyclerWrapper = view.findViewById(R.id.posters_recycler_view_wrapper)
-        }
 
         fun bind(
             movie: Movie?,
@@ -48,7 +47,7 @@ class MovieListAdapter(
             imageLoad: (url: String?, imageView: ImageView, width: Int, height: Int) -> Unit,
             config: Config,
             showLatestRecycler: Boolean,
-            latestMoviesRecyclerInit: (recycler: RecyclerView) -> Unit
+            latestMoviesRecyclerInit: (recycler: RecyclerView, prepend:LinearProgressIndicator,append:LinearProgressIndicator) -> Unit
         ) {
             val url = if (movie == null) null else config.imageUrl + movie.posterPath
             imageLoad(url, movieRowPoster, 100, 200)
@@ -61,9 +60,9 @@ class MovieListAdapter(
                 movie?.id?.let { x -> click(x) }
             }
 
-            recyclerWrapper.visibility = if (showLatestRecycler) View.VISIBLE else View.GONE
+            recyclerWrapper.isVisible = showLatestRecycler
             if (showLatestRecycler) {
-                latestMoviesRecyclerInit(recycler)
+                latestMoviesRecyclerInit(recycler, prepend, append)
             }
         }
     }

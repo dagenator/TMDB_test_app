@@ -6,6 +6,7 @@ import androidx.paging.PagingState
 import com.example.tmdb_test_app.core.retrofit.TMDBApiService
 import com.example.tmdb_test_app.data.models.Config
 import com.example.tmdb_test_app.data.models.Movie
+import kotlinx.coroutines.delay
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -27,6 +28,7 @@ class PopularMoviesPageSource @Inject constructor(
             Log.i("length_tag", "getPopularMovies: ${movies.size}")
             val nextPageNumber = if (movies.isEmpty()) null else page + 1
             val prevPageNumber = if (page > 1) page - 1 else null
+            delay(LOAD_DELAY_MILLIS)
             return LoadResult.Page(movies, prevPageNumber, nextPageNumber)
 
         } catch (e: HttpException) {
@@ -37,6 +39,7 @@ class PopularMoviesPageSource @Inject constructor(
     }
 
     companion object {
+        private const val LOAD_DELAY_MILLIS = 3_000L
         const val DEFAULT_PAGE_SIZE = 20
         const val MAX_PAGE_SIZE = 20
     }

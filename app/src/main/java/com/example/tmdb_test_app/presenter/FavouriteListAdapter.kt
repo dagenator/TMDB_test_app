@@ -41,7 +41,7 @@ class FavouriteListAdapter(private val dataSet: Array<DBMovie>, private val clic
     override fun onBindViewHolder(view: FavouriteMovieViewHolder, position: Int) {
         view.name.text = dataSet[position].title
         view.genre.text = dataSet[position].genres
-        view.year.text = dataSet[position].releaseDate.split("-")[0]
+        view.year.text = dataSet[position].releaseDate?.split("-")?.get(0) ?: ""
         view.score.text = dataSet[position].voteAverage.toString()
 
         view.row.setOnClickListener {

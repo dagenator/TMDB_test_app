@@ -48,13 +48,13 @@ class MovieViewModel @Inject constructor(
     val genres = MutableLiveData<List<Genre>>()
     val randomMovie = MutableLiveData<Resource<Movie>>()
 
-    val popular = Pager(PagingConfig(pageSize = 20)) {
+    val popular = Pager(PagingConfig(pageSize = PopularMoviesPageSource.DEFAULT_PAGE_SIZE)) {
         popularMoviesPageSource
     }.flow
         .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
         .cachedIn(viewModelScope)
 
-    val topRated = Pager(PagingConfig(pageSize = 20)) {
+    val topRated = Pager(PagingConfig(pageSize = TopRatedMoviesPageSource.DEFAULT_PAGE_SIZE)) {
         topRatedMoviesPageSource
     }.flow
         .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
