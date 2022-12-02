@@ -86,6 +86,7 @@ class PopularFragment @Inject constructor() : Fragment(R.layout.movies_list_frag
             false
         )
         recyclerView.layoutManager = horizontalLayout
+        recyclerView.setHasFixedSize(true)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.topRated.collectLatest { pagingData ->
